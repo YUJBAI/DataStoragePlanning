@@ -1,0 +1,190 @@
+{% extends "base.html" %} 
+{% block title %} Home {% endblock %} 
+{% block content %}
+<!--USER INPUT FORM-->
+<section>
+  <h1 align="left">Instrument Cost Calculator</h1>
+  <form method="POST">
+    <div class="row gtr-uniform">
+
+      <div class="col-6 col-12-xsmall form-group">
+        <label for="instrument">Instrument's Name</label>
+        <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" />
+      </div>
+
+      <div class = "col-6 col-12-xsmall form-group">
+        <label for="dataGenerated">Data Generated Per Day (GB)</label>
+        <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" />
+      </div>
+
+      <div class = "col-6 col-12-xsmall fit form-group">
+        <label for="price">Instrument's Price (AUD)</label>
+        <input type="text" name="price" id="price" placeholder="In AUD" />
+      </div>
+
+      <div class = "col-6 col-12-xsmall fit form-group">
+        <label for="lifetime">Expected Lifetime (Years)</label>
+        <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" />
+      </div>
+
+      <div class = "col-6 col-12-xsmall fit form-group">
+        <label for="startDate">Start Date (DD/MM/YYYY)</label>
+        <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" />
+      </div>
+
+      <div class = "col-6 col-12-xsmall fit form-group">
+        <label for="dataSize">Initial Data Size (GB)</label>
+        <input type="text" name="initialSize" id="initialSize" placeholder="In GB" />
+      </div>
+      
+    </div>
+    <div align = "center">
+      <button type="submit" class="button primary">Calculate</button>
+    </div>
+  </form>
+</section>
+<br>
+<br>
+
+<!--RECENT INPUT HISTORY-->
+<h1 align = "Left">Input History</h1>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Instrument's Name</th>
+        <th>Data Generated Per Day (GB)</th>
+        <th>Price (AUD)</th>
+        <th>Expected Lifetime (Years)</th>
+        <th>Start Date (DD/MM/YYYY)</th>
+        <th>Initial Data Size (GB)</th>
+        <th>Instrument</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {%if user.histories %}
+        {% for history in user.histories %}
+        <tr>
+          <th>{{ history.name }}</th>
+          <td>{{ history.data_generated }}</td>
+          <td>{{ history.price }}</td>
+          <td>{{ history.lifetime }}</td>
+          <td>{{ history.start_date }}</td>
+          <td>{{ history.initial_size }}</td>
+          <th>
+            <a class="button primary fit small" onClick  = "deleteHistory({{ history.id }})">Delete</a>
+          </th>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<br>
+<br>
+<!--COST TABLE-->
+<h1 align = "Left">Cost Prediction (GB per day)</h1>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Duration</th>
+        {% for storage in user.storage %}
+        <th>{{ storage.name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in range(5, 6) %}
+      <tr>
+        <th>After {{i}} Years</th>
+        {%if user.histories %}
+          {% for storage in user.storage %} 
+            <td>{{ "$%.2f" | format(calculate_cost(user.histories[-1].data_generated, storage.price, storage.type, i))}}</td>
+          {% endfor %}
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<br>
+<br>
+<!--STORAGE CHART-->
+<div class = "container"><canvas id="myChart" ></canvas></div>
+<script>
+    // setup block
+    const data = {
+        datasets: [{
+            label: 'Before',
+            data: {{ before | safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'After',
+            data: {{ after | safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // config block
+    const config = {
+        type: 'line',
+        data,
+        options: {
+            scales: {
+                x : {
+                    type: "time",
+                    time: {
+                        unit: 'year'
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // render / init block
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+</script>
+{% endblock %}

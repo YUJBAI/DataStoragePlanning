@@ -1,0 +1,14 @@
+volume name,capacity (GiB),used physical (GiB),used logical (GiB),free (GiB),used %,regular files,symbolic links,max file size (GiB),median file size (bytes),average file size (bytes),directories,directories with subdirectories only,empty directories,max dir size (GiB),run_time
+"<a href=""dashboard/volume-detail-analytics?p_volume=Bioinf"">Bioinf</a>",476836.88,422844.98,2255341.15,53991.89,88.7,67216310,738012,7687.31,5304,36077802,3679855,949102,432064,46895.55,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Projects"">Projects</a>",366941.01,215367.17,337254.74,151573.84,58.7,47779494,457661,635.62,50075,7578954,504530,209309,144317,7751.23,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=General"">General</a>",500562.34,307447.41,1104663.43,193114.93,61.4,246048812,2202364,707.1,47902,4822854,6889200,1314941,651176,8453.05,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Genomics"">Genomics</a>",62570.29,47797.24,94732.75,14773.05,76.4,5319765,93008,188.85,27384,19120814,1232582,322196,279927,3305.27,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Home"">Home</a>",238418.44,97867.14,510774.39,140551.29,41,124209018,1278750,799.98,5995,4418273,9239087,2145854,1094189,3065.48,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=System"">System</a>",32767.98,5019.67,83160.63,27748.32,15.3,11170821,375493,797.29,3216,7998686,1190254,121087,6993,1775.4,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Img"">Img</a>",238418.44,226487.84,1710682.7,11930.6,95,43121081,89384,2183.7,361948,42597021,461954,53609,26119,44387.37,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=ImageData"">ImageData</a>",232644.34,172769.1,265259.65,59875.24,74.3,13934508,2,2183.7,2334440,20439852,461983,30017,23776,2183.7,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=SBPM"">SBPM</a>",327679.88,245146.47,339020.69,82533.42,74.8,25769858,18479,969.97,9062,14125996,1116174,170454,18248,8942.12,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Sysbio"">Sysbio</a>",98303.96,73719.43,468890.83,24584.53,75,45677506,1069,316.98,3484,11026524,781235,187909,101117,5208.2,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Admin"">Admin</a>",32767.98,1059.14,974.6,31708.84,3.2,1070887,41,10.49,26872,977086,104991,8424,2355,15.84,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=Archive"">Archive</a>",98303.96,73838.35,770609.72,24465.62,75.1,65435312,41566,6986.37,15146,12644998,1136074,294420,240933,24285.82,13/4/21 4:00
+"<a href=""dashboard/volume-detail-analytics?p_volume=DBkp"">DBkp</a>",98303.96,92805.58,2058358.78,5498.39,94.4,4406519,3,94.89,629153792,503141850,4001,1058,280,33743.95,13/4/21 4:00
