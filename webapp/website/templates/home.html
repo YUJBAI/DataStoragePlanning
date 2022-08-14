@@ -9,32 +9,56 @@
 
       <div class="col-6 col-12-xsmall form-group">
         <label for="instrument">Instrument's Name</label>
-        <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" />
+        {%if form %}
+          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" value="{{ form.get("instrument") }}" />
+        {% else %}
+          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" />
+        {% endif %}
       </div>
 
       <div class = "col-6 col-12-xsmall form-group">
         <label for="dataGenerated">Data Generated Per Day (GB)</label>
-        <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" />
+        {%if form %}
+          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" value="{{ form.get('dataGenerated') }}"/>
+        {% else %}
+          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" />
+        {% endif %}
       </div>
 
       <div class = "col-6 col-12-xsmall fit form-group">
         <label for="price">Instrument's Price (AUD)</label>
-        <input type="text" name="price" id="price" placeholder="In AUD" />
+        {%if form %}
+          <input type="text" name="price" id="price" placeholder="In AUD" value="{{form.get('price')}}"/>
+        {% else %}
+          <input type="text" name="price" id="price" placeholder="In AUD" />
+        {% endif %}
       </div>
 
       <div class = "col-6 col-12-xsmall fit form-group">
         <label for="lifetime">Expected Lifetime (Years)</label>
-        <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" />
+        {%if form %}
+          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" value="{{form.get('lifetime')}}"/>
+        {% else %}
+          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" />
+        {% endif %}
       </div>
 
       <div class = "col-6 col-12-xsmall fit form-group">
         <label for="startDate">Start Date (DD/MM/YYYY)</label>
-        <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" />
+        {%if form %}
+          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" value="{{form.get('startDate')}}"/>
+        {% else %}
+          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" />
+        {% endif %}
       </div>
 
       <div class = "col-6 col-12-xsmall fit form-group">
         <label for="dataSize">Initial Data Size (GB)</label>
-        <input type="text" name="initialSize" id="initialSize" placeholder="In GB" />
+        {%if form %}
+          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" value="{{form.get('initialSize')}}"/>
+        {% else %}
+          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" />
+        {% endif %}
       </div>
       
     </div>

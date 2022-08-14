@@ -13,6 +13,7 @@ views = Blueprint('views', __name__)
 def home():
     #bef_data = None
     #aft_data = None
+    INPUTFORMAT = False
     if request.method == 'POST':
         instrument = request.form.get("instrument")
         dataGenerated = request.form.get('dataGenerated')
@@ -20,7 +21,7 @@ def home():
         lifetime = request.form.get('lifetime')
         startDate = request.form.get('startDate')
         initialSize = request.form.get('initialSize')
-        
+
         if instrument == "":
             flash("Please fill in the Instrument's name!", category='error')
         elif dataGenerated == "":
@@ -44,6 +45,7 @@ def home():
         elif not isFloat(initialSize):
             flash("Please make sure Initial Data Size is a number!", category= "error")
         else:
+            INPUTFORMAT = True
             new_history = History(name = instrument, 
                             data_generated = float(dataGenerated), 
                             price = float(price),
@@ -65,7 +67,10 @@ def home():
     else:
         bef_data = aft_data = None
 
-    return render_template("home.html", user=current_user, before = bef_data, after = aft_data)
+    if INPUTFORMAT:
+        return render_template("home.html", user=current_user, before = bef_data, after = aft_data)
+    else:
+        return render_template("home.html", user=current_user, before=bef_data, after=aft_data, form=request.form)
 
 @views.route('/setting', methods=['GET', 'POST'])
 @login_required
