@@ -55,6 +55,7 @@ def home():
                             user_id=current_user.id)
             db.session.add(new_history)
             db.session.commit()
+            print(new_history)
             flash('Done Calculating!', category='success')
 
     if current_user.histories:
@@ -96,6 +97,29 @@ def setting():
             flash('Storage Added!', category='success')
 
     return render_template("setting.html", user=current_user)
+
+@views.route('/view-history/<history_id>', methods=['POST','GET'])
+def view_history(history_id):
+    print(history_id)
+    input_user = History.query.filter_by(id=history_id).first()
+    print(History)
+    if input_user:
+        #input_user = current_user.histories[-1]
+
+        print(input_user)
+        bef_data, aft_data = generate_graph_data(start_date = input_user.start_date,
+                                    data_generated_per_year = input_user.data_generated * 365,
+                                    year = 5,
+                                    initial_data_size = input_user.initial_size,
+                                    gradient = input_user.initial_size * 1 / 3)
+    else:
+        history_id=0
+        bef_data = aft_data = None
+    # print(type(history_id))
+    # print(input_user.id)
+    return render_template("view_history.html", user=current_user, before = bef_data, after = aft_data, history_id=input_user.id)
+
+
 
 @views.route('/delete-history', methods=['POST'])
 def delete_history():

@@ -1,0 +1,38 @@
+{% extends "base.html" %} 
+{% block title %} View history {% endblock %}
+{% block content %}
+<h1 align = "Left">Input History</h1>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Instrument's Name{{ history_id }}</th>
+        <th>Data Generated Per Day (GB)</th>
+        <th>Price (AUD)</th>
+        <th>Expected Lifetime (Years)</th>
+        <th>Start Date (DD/MM/YYYY)</th>
+        <th>Initial Data Size (GB)</th>
+        <th>Instrument</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%if user.histories and history_id %}
+        {% for history in user.histories %}
+            {% if history.id == history_id %}
+                <tr>
+                  <th>{{ history.name }}</th>
+                  <td>{{ history.data_generated }}</td>
+                  <td>{{ history.price }}</td>
+                  <td>{{ history.lifetime }}</td>
+                  <td>{{ history.start_date }}</td>
+                  <td>{{ history.initial_size }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
