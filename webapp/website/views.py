@@ -104,9 +104,6 @@ def view_history(history_id):
     input_user = History.query.filter_by(id=history_id).first()
     print(History)
     if input_user:
-        #input_user = current_user.histories[-1]
-
-        print(input_user)
         bef_data, aft_data = generate_graph_data(start_date = input_user.start_date,
                                     data_generated_per_year = input_user.data_generated * 365,
                                     year = 5,
