@@ -76,14 +76,10 @@
   <table>
     <thead>
       <tr>
-        <th>Instrument's Name</th>
-        <th>Data Generated Per Day (GB)</th>
-        <th>Price (AUD)</th>
-        <th>Expected Lifetime (Years)</th>
-        <th>Start Date (DD/MM/YYYY)</th>
-        <th>Initial Data Size (GB)</th>
-        <th>Instrument</th>
-        <th>View</th>
+        <th>Name</th>
+        <th>Actions</th>
+        <th>Actions</th>
+        
       </tr>
     </thead>
     <tbody>
@@ -91,22 +87,36 @@
         {% for history in user.histories %}
         <tr>
           <th>{{ history.name }}</th>
-          <td>{{ history.data_generated }}</td>
-          <td>{{ history.price }}</td>
-          <td>{{ history.lifetime }}</td>
-          <td>{{ history.start_date }}</td>
-          <td>{{ history.initial_size }}</td>
           <th>
-            <a class="button primary fit small" onClick  = "deleteHistory({{ history.id }})">Delete</a>
+            <a class="button fit primary small" href="/view-history/{{ history.id }}">View</a>
           </th>
           <th>
-            <a class="button primary fit small" href="/view-history/{{ history.id }}">View</a>
+            <a  onClick  = "deleteHistory({{ history.id }})">Delete</a>
+          </th>
+
+          <th>
+            <a  onclick="openForm()" >Edit</a>
           </th>
         </tr>
         {% endfor %}
       {% endif %}
     </tbody>
   </table>
+</div>
+
+<div class="form-popup" id="myForm">
+  <form action="/action_page.php" class="form-container">
+    <h1 style="font-size: 20px;">Add Insturment Modal</h1>
+
+    <label for="email"><b>Instrument name</b></label>
+    <input type="text" placeholder="Instrument Name" name="email" required>
+
+    <label for="psw"><b>TB per day</b></label>
+    <input type="password" placeholder="GB" name="psw" required>
+
+    <button type="submit" class="btn">Add</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+  </form>
 </div>
 
 <br>
@@ -213,5 +223,13 @@
         document.getElementById('myChart'),
         config
     );
+
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+    
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
 </script>
 {% endblock %}
