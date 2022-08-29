@@ -105,18 +105,44 @@
 </div>
 
 <div class="form-popup" id="myForm">
-  <form action="/action_page.php" class="form-container">
-    <h1 style="font-size: 20px;">Add Insturment Modal</h1>
-
-    <label for="email"><b>Instrument name</b></label>
-    <input type="text" placeholder="Instrument Name" name="email" required>
-
-    <label for="psw"><b>TB per day</b></label>
-    <input type="password" placeholder="GB" name="psw" required>
-
-    <button type="submit" class="btn">Add</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
-  </form>
+  <div>
+    <form action="/action_page.php" class="form-container">
+      <h1 style="font-size: 20px;">Add Insturment Modal</h1>
+      <div class="row gtr-uniform">
+        <div class="col-6 col-12-xsmall form-group">
+          <label for="instrument"> Instrument's Name </label>
+            <input type="text" placeholder="Instrument's Name" value="" />
+        </div>
+  
+        <div class = "col-6 col-12-xsmall form-group">
+          <label for="dataGenerated">Data Generated Per Day (GB)</label>
+            <input type="text"  placeholder="In GB" value="{{ form.get('dataGenerated') }}"/>
+        </div>
+  
+        <div class = "col-6 col-12-xsmall fit form-group">
+          <label for="price">Instrument's Price (AUD)</label>
+            <input type="text"  placeholder="In AUD" value="{{form.get('price')}}"/>
+        </div>
+  
+        <div class = "col-6 col-12-xsmall fit form-group">
+          <label for="lifetime">Expected Lifetime (Years)</label>
+            <input type="text" step = "any"  placeholder="In Years" value="{{form.get('lifetime')}}"/>
+        </div>
+  
+        <div class = "col-6 col-12-xsmall fit form-group">
+          <label for="startDate">Start Date (DD/MM/YYYY)</label>
+            <input type="text"  placeholder="DD/MM/YYYY" value="{{form.get('startDate')}}"/>
+        </div>
+  
+        <div class = "col-6 col-12-xsmall fit form-group">
+          <label for="dataSize">Initial Data Size (GB)</label>
+            <input type="text" placeholder="In GB" value="{{form.get('initialSize')}}"/>
+        </div>
+      </div>
+      <button type="submit" class="btn">Save</button>
+      <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+    </form>
+  </div>
 </div>
 
 <br>
@@ -224,7 +250,7 @@
         config
     );
 
-    function openForm() {
+    function openForm(history) {
       document.getElementById("myForm").style.display = "block";
     }
     
