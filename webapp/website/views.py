@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
-
 from .models import History, Storage
 from . import *
 
 import json
 
 views = Blueprint('views', __name__)
+
 
 @views.route('/', methods=['GET', 'POST'])
 @login_required
@@ -73,6 +73,27 @@ def home():
     else:
         return render_template("home.html", user=current_user, before=bef_data, after=aft_data, form=request.form)
 
+@views.route('/insert', methods=['GET', 'POST'])
+def insert():
+    print('hiiiiiiiiiiii')
+    if request.method == 'POST':
+        instrument = request.form.get("instrument")
+        dataGenerated = request.form.get('dataGenerated')
+        price = request.form.get('price')
+        lifetime = request.form.get('lifetime')
+        startDate = request.form.get('startDate')
+        initialSize = request.form.get('initialSize')
+        new_history = History(name=instrument,
+                              data_generated=float(dataGenerated),
+                              price=float(price),
+                              lifetime=float(lifetime),
+                              start_date=startDate,
+                              initial_size=float(initialSize),
+                              user_id=current_user.id)
+        db.session.add(new_history)
+        db.session.commit()
+    return jsonify('success')
+
 @views.route('/setting', methods=['GET', 'POST'])
 @login_required
 def setting():
@@ -100,9 +121,7 @@ def setting():
 
 @views.route('/view-history/<history_id>', methods=['POST','GET'])
 def view_history(history_id):
-    print(history_id)
     input_user = History.query.filter_by(id=history_id).first()
-    print(History)
     if input_user:
         bef_data, aft_data = generate_graph_data(start_date = input_user.start_date,
                                     data_generated_per_year = input_user.data_generated * 365,
@@ -142,6 +161,48 @@ def delete_storage():
 
     return jsonify({})
 
+@views.route('/update', methods=['POST','GET'])
+def update():
+        print(request.form)
+        history_id = request.form['id']
+        name = request.form['name']
+        data_generated = request.form['data_generated']
+        price = request.form['price']
+        lifetime = request.form['lifetime']
+        start_date = request.form['start_date']
+        initial_size = request.form['initial_size']
+        print(name)
+        history_id = int(history_id)
+        print(History.query.filter_by(id=history_id).first())
+        history = History.query.filter_by(id=history_id).first()
+        history.name = name
+        history.data_generated = data_generated
+        history.price = price
+        history.lifetime = lifetime
+        history.start_date = start_date
+        history.initial_size = initial_size
+        db.session.commit
+        history = History.query.filter_by(id=history_id).first()
+        print(history.name)
+        succuss = 1
+        return jsonify(succuss)
+
+
+@views.route('/modal/<history_id>', methods=['POST','GET'])
+def modal(history_id):
+    print(history_id)
+    input_user = History.query.filter_by(id=history_id).first()
+    print(History)
+    if input_user:
+        bef_data, aft_data = generate_graph_data(start_date=input_user.start_date,
+                                                 data_generated_per_year=input_user.data_generated * 365,
+                                                 year=5,
+                                                 initial_data_size=input_user.initial_size,
+                                                 gradient=input_user.initial_size * 1 / 3)
+    else:
+        history_id = 0
+        bef_data = aft_data = None
+    return render_template("modal.html", user=current_user, before = bef_data, after = aft_data, history_id=input_user.id)
 
 # @views.route('/delete', methods=['POST'])
 # def delete(database, id):

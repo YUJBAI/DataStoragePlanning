@@ -2,73 +2,302 @@
 {% block title %} Home {% endblock %} 
 {% block content %}
 <!--USER INPUT FORM-->
-<section>
-  <h1 align="left">Instrument Cost Calculator</h1>
-  <form method="POST">
-    <div class="row gtr-uniform">
+{#<section>#}
+{#  <h1 align="left">Instrument Cost Calculator</h1>#}
+{#  <form method="POST">#}
+{#    <div class="row gtr-uniform">#}
+{##}
+{#      <div class="col-6 col-12-xsmall form-group">#}
+{#        <label for="instrument">Instrument's Name</label>#}
+{#        {%if form %}#}
+{#          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" value="{{ form.get("instrument") }}" />#}
+{#        {% else %}#}
+{#          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <div class = "col-6 col-12-xsmall form-group">#}
+{#        <label for="dataGenerated">Data Generated Per Day (GB)</label>#}
+{#        {%if form %}#}
+{#          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" value="{{ form.get('dataGenerated') }}"/>#}
+{#        {% else %}#}
+{#          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <div class = "col-6 col-12-xsmall fit form-group">#}
+{#        <label for="price">Instrument's Price (AUD)</label>#}
+{#        {%if form %}#}
+{#          <input type="text" name="price" id="price" placeholder="In AUD" value="{{form.get('price')}}"/>#}
+{#        {% else %}#}
+{#          <input type="text" name="price" id="price" placeholder="In AUD" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <div class = "col-6 col-12-xsmall fit form-group">#}
+{#        <label for="lifetime">Expected Lifetime (Years)</label>#}
+{#        {%if form %}#}
+{#          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" value="{{form.get('lifetime')}}"/>#}
+{#        {% else %}#}
+{#          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <div class = "col-6 col-12-xsmall fit form-group">#}
+{#        <label for="startDate">Start Date (DD/MM/YYYY)</label>#}
+{#        {%if form %}#}
+{#          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" value="{{form.get('startDate')}}"/>#}
+{#        {% else %}#}
+{#          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{##}
+{#      <div class = "col-6 col-12-xsmall fit form-group">#}
+{#        <label for="dataSize">Initial Data Size (GB)</label>#}
+{#        {%if form %}#}
+{#          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" value="{{form.get('initialSize')}}"/>#}
+{#        {% else %}#}
+{#          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" />#}
+{#        {% endif %}#}
+{#      </div>#}
+{#      #}
+{#    </div>#}
+{#    <div align = "center">#}
+{#      <button type="submit" class="button primary">Calculate</button>#}
+{#    </div>#}
+{#  </form>#}
+{#</section>#}
+<h1 align="left">Instrument Cost Calculator</h1>
+<div align="right">
+     <button type="button" name="age" id="age" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
+</div>
 
-      <div class="col-6 col-12-xsmall form-group">
-        <label for="instrument">Instrument's Name</label>
-        {%if form %}
-          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" value="{{ form.get("instrument") }}" />
-        {% else %}
-          <input type="text" name="instrument" id ="instrument" placeholder="Instrument's Name" />
-        {% endif %}
-      </div>
 
-      <div class = "col-6 col-12-xsmall form-group">
-        <label for="dataGenerated">Data Generated Per Day (GB)</label>
-        {%if form %}
-          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" value="{{ form.get('dataGenerated') }}"/>
-        {% else %}
-          <input type="text" name="dataGenerated" id="dataGenerated" placeholder="In GB" />
-        {% endif %}
-      </div>
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Insert data</h4>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
 
-      <div class = "col-6 col-12-xsmall fit form-group">
-        <label for="price">Instrument's Price (AUD)</label>
-        {%if form %}
-          <input type="text" name="price" id="price" placeholder="In AUD" value="{{form.get('price')}}"/>
-        {% else %}
-          <input type="text" name="price" id="price" placeholder="In AUD" />
-        {% endif %}
-      </div>
 
-      <div class = "col-6 col-12-xsmall fit form-group">
-        <label for="lifetime">Expected Lifetime (Years)</label>
-        {%if form %}
-          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" value="{{form.get('lifetime')}}"/>
-        {% else %}
-          <input type="text" step = "any" name="lifetime" id="lifetime" placeholder="In Years" />
-        {% endif %}
-      </div>
-
-      <div class = "col-6 col-12-xsmall fit form-group">
-        <label for="startDate">Start Date (DD/MM/YYYY)</label>
-        {%if form %}
-          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" value="{{form.get('startDate')}}"/>
-        {% else %}
-          <input type="text" name="startDate" id="startDate" placeholder="DD/MM/YYYY" />
-        {% endif %}
-      </div>
-
-      <div class = "col-6 col-12-xsmall fit form-group">
-        <label for="dataSize">Initial Data Size (GB)</label>
-        {%if form %}
-          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" value="{{form.get('initialSize')}}"/>
-        {% else %}
-          <input type="text" name="initialSize" id="initialSize" placeholder="In GB" />
-        {% endif %}
-      </div>
-      
-    </div>
-    <div align = "center">
-      <button type="submit" class="button primary">Calculate</button>
-    </div>
-  </form>
-</section>
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Insert data</h4>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <div>
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             </div>
+             <div>
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             </div>
+             <div>
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             </div>
+             <div>
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             </div>
+             <div>
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             </div>
+             <div>
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             </div>
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+             <br>
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
 <br>
 <br>
+
+<script type="text/javascript">
+$(document).ready(function(){
+ $('#insert_form').on("submit", function(event){
+  event.preventDefault();
+  if($('#instrument').val() == "")
+  {
+   alert("Name is required");
+  }
+  else if($('#dataGenerated').val() == '')
+  {
+   alert("Data generated is required");
+  }
+  else if($('#price').val() == '')
+  {
+   alert("Instrument's price is required");
+  }
+  else if($('#lifetime').val() == '')
+  {
+   alert("Expected lifetime is required");
+  }
+  else if($('#startDate').val() == '')
+  {
+   alert("Start date is required");
+  }
+  else if($('#initialSize').val() == '')
+  {
+   alert("Initial data size is required");
+  }
+  else
+  {
+   $j.ajax({
+        url:"/insert",
+        method:"POST",
+        data:$('#insert_form').serialize(),
+        dataType:'json',
+        beforeSend:function(){
+         $('#insert').val("Inserting");
+        },
+        success:function(data){
+         $('#add_data_Modal').modal('hide');
+          if (data=='success'){
+              window.location.href = "/";
+          }
+         }
+    });
+   };
+ });
+});
+
+
+{#var id = $(this).attr("id")#}
+{#$('#instrument').val(id)#}
+{#$(document).on('click','.update_data',function (){#}
+{#  if($('#instrument').val() == "")#}
+{#  {#}
+{#   alert("Name is required");#}
+{#  }#}
+{#  else if($('#dataGenerated').val() == '')#}
+{#  {#}
+{#   alert("Data generated is required");#}
+{#  }#}
+{#  else if($('#price').val() == '')#}
+{#  {#}
+{#   alert("Instrument's price is required");#}
+{#  }#}
+{#  else if($('#lifetime').val() == '')#}
+{#  {#}
+{#   alert("Expected lifetime is required");#}
+{#  }#}
+{#  else if($('#startDate').val() == '')#}
+{#  {#}
+{#   alert("Start date is required");#}
+{#  }#}
+{#  else if($('#initialSize').val() == '')#}
+{#  {#}
+{#   alert("Initial data size is required");#}
+{#  }#}
+{#  else#}
+{#  {#}
+{#   $j.ajax({#}
+{#        url:"/update",#}
+{#        method:"POST",#}
+{#        data:$('#update_form').serialize(),#}
+{#        dataType:'json',#}
+{#        beforeSend:function(){#}
+{#         $('#update').val("Updating");#}
+{#        },#}
+{#        success:function(data){#}
+{#         $('#update_data_Modal').modal('hide');#}
+{#          if (data=='success'){#}
+{#              window.location.href = "/";#}
+{#          }#}
+{#         }#}
+{#    });#}
+{#   };#}
+{#})#}
+
+{#$(document).ready(function () {#}
+{#    //show input element#}
+{#    $('.edit').click(function () {#}
+{#        $('.txtedit').hide();#}
+{#        $(this).next('.txtedit').show().focus();#}
+{#        $(this).hide();#}
+{#    });#}
+{#    //save data#}
+{#    $(".txtedit").focusout(function () {#}
+{#        //get edit id, field name and value#}
+{#        var id = this.id;#}
+{#        var split_id = id.split("_");#}
+{#        var field_name = split_id[0];#}
+{#        alert(field_name);#}
+{#        var edit_id = split_id[1];#}
+{#        alert(edit_id);#}
+{#        var value = $(this).val();#}
+{#        var id = this.id;#}
+{#        alert(this)#}
+{#        alert(this.value)#}
+{#        alert(this.field)#}
+{#        var split_id = id.split("_");#}
+{#        var field_name = split_id[0];#}
+{#        alert(field_name);#}
+{#        var edit_id = split_id[1];#}
+{#        alert(edit_id);#}
+{#        var value = $(this).val();#}
+{##}
+{#        //hide input element#}
+{#        $(this).hide();#}
+{##}
+{#        //hide and change text of the container with input element#}
+{#        $(this).prev('.edit').show();#}
+{#        $(this).prev('.edit').text(value);#}
+{#        $.ajax({#}
+{#            url: '/update',#}
+{#            type: 'POST',#}
+{#            data: {field: field_name, value: value, id: edit_id},#}
+{#            success: function (response) {#}
+{#                if (response == 1) {#}
+{#                    alert("Save successfully");#}
+{#                } else {#}
+{#                    alert("Not saved");#}
+{#                }#}
+{#            }#}
+{#        })#}
+{#    })#}
+{#}#}
+
+</script>
 
 <!--RECENT INPUT HISTORY-->
 <h1 align = "Left">Input History</h1>
@@ -84,13 +313,17 @@
         <th>Initial Data Size (GB)</th>
         <th>Instrument</th>
         <th>View</th>
+        <th>Update</th>
       </tr>
     </thead>
     <tbody>
       {%if user.histories %}
         {% for history in user.histories %}
         <tr>
-          <th>{{ history.name }}</th>
+          <th>
+              <div class="edit">{{ history.name }}</div>
+              <input type="text" class="txtedit" value="{{ history.name }}" id="{{ history.id }})">
+          </th>
           <td>{{ history.data_generated }}</td>
           <td>{{ history.price }}</td>
           <td>{{ history.lifetime }}</td>
@@ -102,6 +335,10 @@
           <th>
             <a class="button primary fit small" href="/view-history/{{ history.id }}">View</a>
           </th>
+          <th>
+{#            <input type="button" name="update" value="update" id="{{history.id}}" class="button primary fit small update_data" />#}
+            <a class="button primary fit small" href="/modal/{{ history.id }}">Update</a>
+          </th>
         </tr>
         {% endfor %}
       {% endif %}
@@ -109,39 +346,44 @@
   </table>
 </div>
 
-<br>
-<br>
-<!--COST TABLE-->
-<h1 align = "Left">Cost Prediction (GB per day)</h1>
-<div class="table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <th>Duration</th>
-        {% for storage in user.storage %}
-        <th>{{ storage.name }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for i in range(5, 6) %}
-      <tr>
-        <th>After {{i}} Years</th>
-        {%if user.histories %}
-          {% for storage in user.storage %} 
-            <td>{{ "$%.2f" | format(calculate_cost(user.histories[-1].data_generated, storage.price, storage.type, i))}}</td>
-          {% endfor %}
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+{% block modal %}{% endblock %}
 
-<br>
-<br>
-<!--STORAGE CHART-->
-<div class = "container"><canvas id="myChart" ></canvas></div>
+{#<div id="update_data_Modal" class="modal fade">#}
+{# <div class="modal-dialog">#}
+{#   <div class="modal-content">#}
+{#   <div class="modal-header">#}
+{#    <button type="button" class="close" data-dismiss="modal">×</button>#}
+{#    <h4 class="modal-title">Insert data</h4>#}
+{#   </div>#}
+{#    <div class="modal-body">#}
+{#        <form method="post" id="update_form">#}
+{#             <label>Instrument's Name</label>#}
+{#             <input type="text" name="instrument" id ="instrument" class="form-control" />#}
+{#             <label>Data Generated Per Day (GB)</label>#}
+{#             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />#}
+{#             <label>Instrument's Price (AUD)</label>#}
+{#             <input type="text" name="price" id="price" class="form-control" />#}
+{#             <label>Expected Lifetime (Years)</label>#}
+{#             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />#}
+{#             <label>Start Date (DD/MM/YYYY)</label>#}
+{#             <input type="text" name="startDate" id="startDate" class="form-control" />#}
+{#             <label>Initial Data Size (GB)</label>#}
+{#             <input type="text" name="initialSize" id="initialSize" class="form-control" />#}
+{#             <input type="submit" name="update" id="update" value="Update" class="btn btn-success" />#}
+{#        </form>#}
+{#   </div>#}
+{#   <div class="modal-footer">#}
+{#    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+{#   </div>#}
+{#  </div>#}
+{# </div>#}
+{#</div>#}
+
+
+
+
+
+
 <script>
     // setup block
     const data = {
@@ -214,4 +456,5 @@
         config
     );
 </script>
+{% block script %}{% endblock %}
 {% endblock %}
