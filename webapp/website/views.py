@@ -46,8 +46,8 @@ def home():
             flash("Please make sure Initial Data Size is a number!", category= "error")
         else:
             INPUTFORMAT = True
-            new_history = History(name = instrument, 
-                            data_generated = float(dataGenerated), 
+            new_history = History(name = instrument,
+                            data_generated = float(dataGenerated),
                             price = float(price),
                             lifetime = float(lifetime),
                             start_date = startDate,
@@ -173,15 +173,12 @@ def update():
         initial_size = request.form['initial_size']
         print(name)
         history_id = int(history_id)
-        print(History.query.filter_by(id=history_id).first())
-        history = History.query.filter_by(id=history_id).first()
-        history.name = name
-        history.data_generated = data_generated
-        history.price = price
-        history.lifetime = lifetime
-        history.start_date = start_date
-        history.initial_size = initial_size
-        db.session.commit
+        history = History.query.get(history_id)
+        print(type(history))
+        print(history.name)
+        History.query.filter_by(id=history_id).update({'name': name, 'data_generated': data_generated, 'price': price,
+                                                       'lifetime': lifetime, 'start_date': start_date, 'initial_size': initial_size})
+        db.session.commit()
         history = History.query.filter_by(id=history_id).first()
         print(history.name)
         succuss = 1
@@ -215,3 +212,9 @@ def modal(history_id):
 #             db.session.commit()
 
 #     return jsonify({})
+
+# @views.route('/test/<history_id>',methods=['POST','GET'])
+# def test(history_id):
+#     history = History.query.filter_by(id=history_id).first()
+#     name = history.name
+#     return render_template("teset.html", name=name)
