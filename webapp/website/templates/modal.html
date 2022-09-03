@@ -1,4 +1,4 @@
-{% extends 'home.html' %}
+{% extends 'view_history.html' %}
 {% block modal %}
 
 <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -6,9 +6,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Update the history</h5>
-{#        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#          <span aria-hidden="true">&times;</span>#}
-{#        </button>#}
       </div>
       <div class="modal-body">
           {%if user.histories and history_id %}
@@ -51,7 +48,7 @@
 
       </div>
       <div class="modal-footer">
-          <a href="{{ url_for('views.home') }}" class="btn btn-secondary">Close</a>
+          <a href="{{ url_for('views.view_history',history_id=history_id)}}" class="btn btn-secondary">Close</a>
       </div>
     </div>
   </div>

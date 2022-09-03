@@ -12,6 +12,7 @@
         <th>Expected Lifetime (Years)</th>
         <th>Start Date (DD/MM/YYYY)</th>
         <th>Initial Data Size (GB)</th>
+        <th>Edit</th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,9 @@
                   <td>{{ history.lifetime }}</td>
                   <td>{{ history.start_date }}</td>
                   <td>{{ history.initial_size }}</td>
+                  <th>
+                    <a class="button primary fit small" href="/modal/{{ history.id }}">Edit</a>
+                  </th>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -70,6 +74,9 @@
 <br>
 <!--STORAGE CHART-->
 <div class = "container"><canvas id="myChart" ></canvas></div>
+
+{% block modal %}{% endblock %}
+{% block script %}{% endblock %}
 
 <script>
     // setup block
