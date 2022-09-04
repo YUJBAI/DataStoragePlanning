@@ -19,7 +19,7 @@
       {%if user.histories and history_id %}
         {% for history in user.histories %}
             {% if history.id == history_id %}
-                <tr>
+                <tr id = "myTable">
                   <th>{{ history.name }}</th>
                   <td>{{ history.data_generated }}</td>
                   <td>{{ history.price }}</td>
@@ -28,6 +28,33 @@
                   <td>{{ history.initial_size }}</td>
                   <th>
                     <a class="button primary fit small" href="/modal/{{ history.id }}">Edit</a>
+                    <a onclick="openForm()" >Edit</a>
+                  </th>
+                </tr>
+
+                <tr id = "myForm" hidden>
+                  <th>
+                    <input type="text" placeholder="Instrument's Name" value="{{ history.name }}" />
+                  </th>
+                  <th>
+                    <input type="text" placeholder="In GB"  value="{{ history.data_generated }}" />
+                  </th>
+                  <th>
+                    <input type="text" placeholder="In AUD" value="{{ history.price }}" />
+                  </th>
+                  <th>
+                    <input type="text" placeholder="In Years" value="{{ history.lifetime }}" />
+                  </th>
+                  <th>
+                    <input type="text" placeholder="DD/MM/YYYY" value="{{ history.start_date }}" />
+                  </th>
+
+                  <th>
+                    <input type="text" placeholder="In GB" value="{{ history.initial_size }}" />
+                  </th>
+                  <th>
+                    <a onclick="SaveForm()" >Save</a>
+                    <a onclick="closeForm()" >Cancel</a>
                   </th>
                 </tr>
             {% endif %}
@@ -36,6 +63,22 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  function openForm(){
+    document.getElementById("myForm").hidden = false;
+    document.getElementById("myTable").hidden = true;  
+  }
+
+  function closeForm(){
+    document.getElementById("myTable").hidden = false;
+    document.getElementById("myForm").hidden = true;  
+  }
+
+  function saveForm(){
+    // need to be impelement
+  }
+</script>
 
 <br>
 <br>

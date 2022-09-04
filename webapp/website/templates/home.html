@@ -143,14 +143,10 @@ $(document).ready(function(){
   <table>
     <thead>
       <tr>
-        <th>Instrument's Name</th>
-        <th>Data Generated Per Day (GB)</th>
-        <th>Price (AUD)</th>
-        <th>Expected Lifetime (Years)</th>
-        <th>Start Date (DD/MM/YYYY)</th>
-        <th>Initial Data Size (GB)</th>
-        <th>Instrument</th>
-        <th>View</th>
+        <th>Name</th>
+        <th>Actions</th>
+        <th>Actions</th>
+        
       </tr>
     </thead>
     <tbody>
@@ -167,10 +163,14 @@ $(document).ready(function(){
           <td>{{ history.start_date }}</td>
           <td>{{ history.initial_size }}</td>
           <th>
-            <a class="button primary fit small" onClick  = "deleteHistory({{ history.id }})">Delete</a>
+            <a class="button fit primary small" href="/view-history/{{ history.id }}">View</a>
           </th>
           <th>
-            <a class="button primary fit small" href="/view-history/{{ history.id }}">View</a>
+            <a  onClick  = "deleteHistory({{ history.id }})">Delete</a>
+          </th>
+
+          <th>
+            <a  onclick="openForm()" >Edit</a>
           </th>
         </tr>
         {% endfor %}
@@ -250,5 +250,13 @@ $(document).ready(function(){
         document.getElementById('myChart'),
         config
     );
+
+    function openForm(history) {
+      document.getElementById("myForm").style.display = "block";
+    }
+    
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
 </script>
 {% endblock %}
