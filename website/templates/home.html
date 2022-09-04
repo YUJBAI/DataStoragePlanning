@@ -1,0 +1,254 @@
+{% extends "base.html" %} 
+{% block title %} Home {% endblock %} 
+{% block content %}
+<!--USER INPUT FORM-->
+<h1 align="left">Instrument Cost Calculator</h1>
+<div align="right">
+     <button type="button" name="age" id="age" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
+</div>
+
+
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Insert data</h4>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Insert data</h4>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <div>
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             </div>
+             <div>
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             </div>
+             <div>
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             </div>
+             <div>
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             </div>
+             <div>
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             </div>
+             <div>
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             </div>
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+             <br>
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+<br>
+<br>
+
+<script type="text/javascript">
+$(document).ready(function(){
+ $('#insert_form').on("submit", function(event){
+  event.preventDefault();
+  if($('#instrument').val() == "")
+  {
+   alert("Name is required");
+  }
+  else if($('#dataGenerated').val() == '')
+  {
+   alert("Data generated is required");
+  }
+  else if($('#price').val() == '')
+  {
+   alert("Instrument's price is required");
+  }
+  else if($('#lifetime').val() == '')
+  {
+   alert("Expected lifetime is required");
+  }
+  else if($('#startDate').val() == '')
+  {
+   alert("Start date is required");
+  }
+  else if($('#initialSize').val() == '')
+  {
+   alert("Initial data size is required");
+  }
+  else
+  {
+   $j.ajax({
+        url:"/insert",
+        method:"POST",
+        data:$('#insert_form').serialize(),
+        dataType:'json',
+        beforeSend:function(){
+         $('#insert').val("Inserting");
+        },
+        success:function(data){
+         $('#add_data_Modal').modal('hide');
+          if (data=='success'){
+              window.location.href = "/";
+          }
+         }
+    });
+   };
+ });
+});
+
+</script>
+
+<!--RECENT INPUT HISTORY-->
+<h1 align = "Left">Input History</h1>
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Instrument's Name</th>
+        <th>Data Generated Per Day (GB)</th>
+        <th>Price (AUD)</th>
+        <th>Expected Lifetime (Years)</th>
+        <th>Start Date (DD/MM/YYYY)</th>
+        <th>Initial Data Size (GB)</th>
+        <th>Instrument</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%if user.histories %}
+        {% for history in user.histories %}
+        <tr>
+          <th>
+              <div class="edit">{{ history.name }}</div>
+              <input type="text" class="txtedit" value="{{ history.name }}" id="{{ history.id }})">
+          </th>
+          <td>{{ history.data_generated }}</td>
+          <td>{{ history.price }}</td>
+          <td>{{ history.lifetime }}</td>
+          <td>{{ history.start_date }}</td>
+          <td>{{ history.initial_size }}</td>
+          <th>
+            <a class="button primary fit small" onClick  = "deleteHistory({{ history.id }})">Delete</a>
+          </th>
+          <th>
+            <a class="button primary fit small" href="/view-history/{{ history.id }}">View</a>
+          </th>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+    // setup block
+    const data = {
+        datasets: [{
+            label: 'Before',
+            data: {{ before | safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        },
+        {
+            label: 'After',
+            data: {{ after | safe }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    // config block
+    const config = {
+        type: 'line',
+        data,
+        options: {
+            scales: {
+                x : {
+                    type: "time",
+                    time: {
+                        unit: 'year'
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    // render / init block
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+</script>
+{% endblock %}
