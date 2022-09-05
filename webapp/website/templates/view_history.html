@@ -27,35 +27,54 @@
                   <td>{{ history.start_date }}</td>
                   <td>{{ history.initial_size }}</td>
                   <th>
-                    <a class="button primary fit small" href="/modal/{{ history.id }}">Edit</a>
                     <a onclick="openForm()" >Edit</a>
                   </th>
                 </tr>
 
                 <tr id = "myForm" hidden>
+                  <form class="update_form">
+                    <input type="hidden" class="form-id" value="{{history.id}}">
                   <th>
-                    <input type="text" placeholder="Instrument's Name" value="{{ history.name }}" />
+                    <div class="form-group">
+                      <input type="text" class="form-name" id="{{ history.id }}" value="{{history.name}}">
+                    </div>
                   </th>
+                    
                   <th>
-                    <input type="text" placeholder="In GB"  value="{{ history.data_generated }}" />
-                  </th>
-                  <th>
-                    <input type="text" placeholder="In AUD" value="{{ history.price }}" />
-                  </th>
-                  <th>
-                    <input type="text" placeholder="In Years" value="{{ history.lifetime }}" />
-                  </th>
-                  <th>
-                    <input type="text" placeholder="DD/MM/YYYY" value="{{ history.start_date }}" />
+                    <div class="form-group">
+                      <input type="text" class="form-data_generated" id="{{ history.id }}" value="{{history.data_generated}}">
+                  </div>
                   </th>
 
                   <th>
-                    <input type="text" placeholder="In GB" value="{{ history.initial_size }}" />
+                    <div class="form-group">
+                      <input type="text" class="form-price" id="{{ history.id }}" value="{{history.price}}">
+                  </div>
                   </th>
+          
                   <th>
-                    <a onclick="SaveForm()" >Save</a>
-                    <a onclick="closeForm()" >Cancel</a>
+                    <div class="form-group">
+                      <input type="text" class="form-lifetime" id="{{ history.id }}" value="{{history.lifetime}}">
+                    </div>
                   </th>
+
+                  <th>
+                    <div class="form-group">
+                      <input type="text" class="form-start_date" id="{{ history.id }}" value="{{history.start_date}}">
+                  </div>
+                  </th>
+
+                  <th>
+                    <div class="form-group">
+                      <input type="text" class="form-initial_size" id="{{ history.id }}" value="{{history.initial_size}}">
+                    </div>
+                  </th>
+
+                  <th>
+                    <a onclick="closeForm()" >Cancel</a>
+                    <input type="submit" value="Save">
+                  </th>
+                </form>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -75,9 +94,32 @@
     document.getElementById("myForm").hidden = true;  
   }
 
-  function saveForm(){
-    // need to be impelement
-  }
+  $('form.update_form').on('submit', function (){
+    console.log($('.form-id').val())
+    $j.ajax({
+        url: '/update',
+        type: 'POST',
+        data:{
+            'id': $('.form-id').val(),
+            'name': $('.form-name').val(),
+            'data_generated': $('.form-data_generated').val(),
+            'price': $('.form-price').val(),
+            'lifetime': $('.form-lifetime').val(),
+            'start_date': $('.form-start_date').val(),
+            'initial_size': $('.form-initial_size').val()
+        },
+        success:function (response){
+            if(response == 1){
+                alert("Save successfully");
+                window.location.reload();
+            }else{
+                alert("Not saved");
+            }
+        }
+    })
+    event.preventDefault();
+});
+
 </script>
 
 <br>
