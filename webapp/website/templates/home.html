@@ -86,56 +86,6 @@
 <br>
 <br>
 
-<script type="text/javascript">
-$(document).ready(function(){
- $('#insert_form').on("submit", function(event){
-  event.preventDefault();
-  if($('#instrument').val() == "")
-  {
-   alert("Name is required");
-  }
-  else if($('#dataGenerated').val() == '')
-  {
-   alert("Data generated is required");
-  }
-  else if($('#price').val() == '')
-  {
-   alert("Instrument's price is required");
-  }
-  else if($('#lifetime').val() == '')
-  {
-   alert("Expected lifetime is required");
-  }
-  else if($('#startDate').val() == '')
-  {
-   alert("Start date is required");
-  }
-  else if($('#initialSize').val() == '')
-  {
-   alert("Initial data size is required");
-  }
-  else
-  {
-   $j.ajax({
-        url:"/insert",
-        method:"POST",
-        data:$('#insert_form').serialize(),
-        dataType:'json',
-        beforeSend:function(){
-         $('#insert').val("Inserting");
-        },
-        success:function(data){
-         $('#add_data_Modal').modal('hide');
-          if (data=='success'){
-              window.location.href = "/";
-          }
-         }
-    });
-   };
- });
-});
-
-</script>
 
 <!--RECENT INPUT HISTORY-->
 <h1 align = "Left">Input History</h1>
@@ -143,10 +93,15 @@ $(document).ready(function(){
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Actions</th>
-        <th>Actions</th>
-        
+        <th>Instrument's Name</th>
+        <th>Data Generated Per Day (GB)</th>
+        <th>Price (AUD)</th>
+        <th>Expected Lifetime (Years)</th>
+        <th>Start Date (DD/MM/YYYY)</th>
+        <th>Initial Data Size (GB)</th>
+        <th>Delet</th>
+        <th>View</th>
+    
       </tr>
     </thead>
     <tbody>
@@ -155,7 +110,6 @@ $(document).ready(function(){
         <tr>
           <th>
               <div class="edit">{{ history.name }}</div>
-              <input type="text" class="txtedit" value="{{ history.name }}" id="{{ history.id }})">
           </th>
           <td>{{ history.data_generated }}</td>
           <td>{{ history.price }}</td>
@@ -163,15 +117,13 @@ $(document).ready(function(){
           <td>{{ history.start_date }}</td>
           <td>{{ history.initial_size }}</td>
           <th>
-            <a class="button fit primary small" href="/view-history/{{ history.id }}">View</a>
-          </th>
-          <th>
-            <a  onClick  = "deleteHistory({{ history.id }})">Delete</a>
+            <a onClick  = "deleteHistory({{ history.id }})">Delete</a>
           </th>
 
           <th>
-            <a  onclick="openForm()" >Edit</a>
+            <a href="/view-history/{{ history.id }}">View/Edit</a>
           </th>
+
         </tr>
         {% endfor %}
       {% endif %}
@@ -179,84 +131,5 @@ $(document).ready(function(){
   </table>
 </div>
 
-<script>
-    // setup block
-    const data = {
-        datasets: [{
-            label: 'Before',
-            data: {{ before | safe }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        },
-        {
-            label: 'After',
-            data: {{ after | safe }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    };
 
-    // config block
-    const config = {
-        type: 'line',
-        data,
-        options: {
-            scales: {
-                x : {
-                    type: "time",
-                    time: {
-                        unit: 'year'
-                    }
-                },
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    };
-
-    // render / init block
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
-
-    function openForm(history) {
-      document.getElementById("myForm").style.display = "block";
-    }
-    
-    function closeForm() {
-      document.getElementById("myForm").style.display = "none";
-    }
-</script>
 {% endblock %}
