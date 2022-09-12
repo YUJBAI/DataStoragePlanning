@@ -12,8 +12,10 @@
  <div class="modal-dialog">
    <div class="modal-content">
    <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
-    <h4 class="modal-title">Insert data</h4>
+    <h4 class="modal-title">Insert data
+    </h4>
+
+    <button type="button" style={{"margin-right: 10%;"}} class="close" data-dismiss="modal">×</button>
    </div>
     <div class="modal-body">
         <form method="post" id="insert_form">
@@ -38,6 +40,13 @@
   </div>
  </div>
 </div>
+
+<div>
+</div>  
+
+
+
+
 
 
 <div id="add_data_Modal" class="modal fade">
@@ -117,7 +126,15 @@
           <td>{{ history.start_date }}</td>
           <td>{{ history.initial_size }}</td>
           <th>
-            <a onClick  = "deleteHistory({{ history.id }})">Delete</a>
+            <div class="popup" onclick="myFunction({{history.id}})">
+              Delete
+              <span class="popuptext" id="myPopup{{history.id}}">
+                Are you sure delete this history?
+                <a onClick  = "deleteHistory({{ history.id }})">Yes</a>
+                /
+                <a>No</a>
+              </span>
+            </div>
           </th>
 
           <th>
@@ -130,6 +147,14 @@
     </tbody>
   </table>
 </div>
+
+<script>
+  // When the user clicks on div, open the popup
+  function myFunction(historyId) {
+    var popup = document.getElementById("myPopup" + historyId);
+    popup.classList.toggle("show");
+  }
+</script>
 
 
 {% endblock %}

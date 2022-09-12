@@ -3,6 +3,10 @@ function deleteHistory(historyId) {
     method: "POST",
     body: JSON.stringify({ historyId: historyId }),
   }).then((_res) => {
+    swal({
+      title: "Success Deleted",
+      icon: "success",
+    });
     window.location.href = "/";
   });
 }
@@ -57,10 +61,19 @@ $('form.update_form').on('submit', function (){
       },
       success:function (response){
           if(response == 1){
-              alert("Save successfully");
+              swal({
+                title: "Save Successfully!",
+                icon: "success",
+                button: "Keep going!"
+              });
               window.location.reload();
           }else{
-              alert("Not saved");
+            swal({
+              title: "Something Wrong!",
+              text: "Please try again!",
+              icon: "warning",
+              button: "Try again!"
+            });
           }
       }
   })
@@ -72,27 +85,57 @@ $(document).ready(function(){
    event.preventDefault();
    if($('#instrument').val() == "")
    {
-    alert("Name is required");
+    swal({
+      title: "Name is required!",
+      text: "Please Fill Up The Name",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else if($('#dataGenerated').val() == '')
    {
-    alert("Data generated is required");
+    swal({
+      title: "Data generated is required!",
+      text: "Please Fill Up The Data Generated",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else if($('#price').val() == '')
    {
-    alert("Instrument's price is required");
+    swal({
+      title: "Instrument's price is required!",
+      text: "Please Fill Up The Instrument's Price",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else if($('#lifetime').val() == '')
    {
-    alert("Expected lifetime is required");
+    swal({
+      title: "Expected Lifetime is Required!",
+      text: "Please Fill Up The DExpected Lifetimed",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else if($('#startDate').val() == '')
    {
-    alert("Start date is required");
+    swal({
+      title: "Start date is required!",
+      text: "Please Fill Up The Start date",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else if($('#initialSize').val() == '')
    {
-    alert("Initial data size is required");
+    swal({
+      title: "Initial data size is required!",
+      text: "Please Fill Up The Initial Data Size",
+      icon: "warning",
+      button: "Try again!"
+    });
    }
    else
    {
@@ -107,7 +150,12 @@ $(document).ready(function(){
          success:function(data){
           $('#add_data_Modal').modal('hide');
            if (data=='success'){
+            
                window.location.href = "/";
+               swal({
+                title: "Success!",
+                icon: "Success",
+              });
            }
           }
      });
