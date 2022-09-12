@@ -6,8 +6,9 @@ function deleteHistory(historyId) {
     swal({
       title: "Success Deleted",
       icon: "success",
+    }).then((value) => {
+      window.location.href = "/";
     });
-    window.location.href = "/";
   });
 }
 
@@ -150,12 +151,13 @@ $(document).ready(function(){
          success:function(data){
           $('#add_data_Modal').modal('hide');
            if (data=='success'){
-            
-               window.location.href = "/";
-               swal({
-                title: "Success!",
-                icon: "Success",
-              });
+              
+            swal({
+              title: "Success Deleted",
+              icon: "success",
+            }).then((value) => {
+              window.location.href = "/";
+            });
            }
           }
      });
