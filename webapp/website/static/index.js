@@ -17,7 +17,12 @@ function deleteStorage(storageId) {
     method: "POST",
     body: JSON.stringify({ storageId: storageId }),
   }).then((_res) => {
-    window.location.href = "/setting";
+    swal({
+      title: "Success Deleted",
+      icon: "success",
+    }).then((value) => {
+      window.location.href = "/setting";
+    });
   });
 }
 
@@ -66,8 +71,9 @@ $('form.update_form').on('submit', function (){
                 title: "Save Successfully!",
                 icon: "success",
                 button: "Keep going!"
+              }).then((value) => {
+                window.location.reload()
               });
-              window.location.reload();
           }else{
             swal({
               title: "Something Wrong!",

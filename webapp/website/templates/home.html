@@ -126,7 +126,7 @@
           <td>{{ history.start_date }}</td>
           <td>{{ history.initial_size }}</td>
           <th>
-            <div class="popup" onclick="myFunction({{history.id}})">
+            <div class="popup" onclick="popUpHistory({{history.id}})">
               Delete
               <span class="popuptext" id="myPopup{{history.id}}">
                 Are you sure delete this history?
@@ -150,7 +150,7 @@
 
 <script>
   // When the user clicks on div, open the popup
-  function myFunction(historyId) {
+  function popUpHistory(historyId) {
     var popup = document.getElementById("myPopup" + historyId);
     popup.classList.toggle("show");
   }

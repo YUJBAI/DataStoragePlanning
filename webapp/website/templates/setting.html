@@ -11,7 +11,7 @@
     </div>
     <div class = "col-6 col-12-xsmall form-group">
       <label for="price">GB per Month (AUD)</label>
-      <input type="text" name="price" id=price" placeholder="In AUD"/>
+      <input type="text" name="price" id="price" placeholder="In AUD"/>
     </div>
     <div class = "col-6 col-12-xsmall form-group">
       <label for = "storageType">Storage Type</label>
@@ -52,11 +52,27 @@
         <td>{{ storage.price }}</td>
         <td>{{ storage.type }}</td>
         <td>
-          <a class="button primary fit small" onClick  = "deleteStorage({{ storage.id }})">Delete</a>
+          <div class="popup" onclick="popUpStroage({{storage.id}})">
+            Delete
+            <span class="popuptext" id="myStorage{{storage.id}}">
+              Are you sure delete this storage?
+              <a onClick  = "deleteStorage({{ storage.id }})">Yes</a>
+              /
+              <a >No</a>
+            </span>
+          </div>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
+<script>
+  // When the user clicks on div, open the popup
+  function popUpStroage(storageID) {
+    var popup = document.getElementById("myStorage" + storageID);
+    popup.classList.toggle("show");
+  }
+</script>
 {% endblock %}
