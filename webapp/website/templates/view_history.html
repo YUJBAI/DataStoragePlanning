@@ -119,7 +119,11 @@
 <br>
 <br>
 <!--STORAGE CHART-->
-<div class = "container"><canvas id="myChart" ></canvas></div>
+<button onClick = "changeMode()" >View log/original</button>
+<div class = "container" id= "chart"> Original Graph <canvas id="myChart" ></canvas></div>
+
+<div class = "container" id = "logChart"> Log Graph <canvas id="myLogChart" ></canvas></div>
+
 
 {% block modal %}{% endblock %}
 {% block script %}{% endblock %}
@@ -190,11 +194,113 @@
         }
     };
 
-    // render / init block
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
+     // render / init block
+     var myChart = new Chart(
+      document.getElementById('myChart'),
+      config
     );
+
+
+
+    // process data for log function
+    var data_before = {{ before | safe }};
+    var data_after = {{ after | safe }};
+    for(let i = 0; i < data_before.length; i++){
+      data_before[i]["y"] = Math.log(data_before[i]["y"]);
+    }
+    for(let i = 0; i < data_after.length; i++){
+      data_after[i]["y"] = Math.log(data_after[i]["y"]);
+    }
+    
+    const log_data = {
+      datasets: [{
+          label: 'Before',
+          data: data_before,
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+      },
+      {
+          label: 'After',
+          data: data_after,
+          backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+      }],
+    };
+
+    const log_config = {
+      type: 'line',
+      data: log_data,
+      options: {
+          scales: {
+              x : {
+                  type: "time",
+                  time: {
+                      unit: 'year'
+                  }
+              },
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+    };
+
+    var myChart = new Chart(
+        document.getElementById('myLogChart'),
+        log_config
+    );
+
+    document.getElementById('logChart').style.display = 'none'
+
+
+    function changeMode(){
+      var x = document.getElementById("chart");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+
+      var x = document.getElementById("logChart");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+
+    }
+    
+
 </script>
 
 {% endblock %}

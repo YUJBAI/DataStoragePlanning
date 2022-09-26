@@ -159,11 +159,20 @@ $(document).ready(function(){
            if (data=='success'){
               
             swal({
-              title: "Success Deleted",
+              title: "Success Added!",
               icon: "success",
             }).then((value) => {
               window.location.href = "/";
             });
+           }else{
+
+            swal({
+              title: "Something Wrong!",
+              icon: "warning",
+            }).then((value) => {
+              window.location.href = "/";
+            });
+
            }
           }
      });
