@@ -1,0 +1,52 @@
+{% extends "base.html" %} 
+{% block title %} View Muitiple Histories {% endblock %}
+{% block content %}
+
+<div lass="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Instrument's Name</th>
+          <th>Data Generated Per Day (GB)</th>
+          <th>Price (AUD)</th>
+          <th>Expected Lifetime (Years)</th>
+          <th>Start Date (DD/MM/YYYY)</th>
+          <th>Initial Data Size (GB)</th>
+
+          <th>Select</th>
+      
+        </tr>
+      </thead>
+      <tbody>
+        {%if user.histories %}
+          {% for history in user.histories %}
+          <tr>
+            <th>
+                <div class="edit">{{ history.name }}</div>
+            </th>
+            <td>{{ history.data_generated }}</td>
+            <td>{{ history.price }}</td>
+            <td>{{ history.lifetime }}</td>
+            <td>{{ history.start_date }}</td>
+            <td>{{ history.initial_size }}</td>
+  
+            <th>
+              <a href="">Select</a>
+            </th>
+  
+          </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  Before datas:
+  {{before_datas}}
+
+  <br></br>
+
+  After datas:
+  {{after_datas}}
+  
+
+{% endblock %}

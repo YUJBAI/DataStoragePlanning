@@ -46,9 +46,6 @@
 
 
 
-
-
-
 <div id="add_data_Modal" class="modal fade">
  <div class="modal-dialog">
    <div class="modal-content">
@@ -96,9 +93,32 @@
 <br>
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+<form action="show" method="post">
+  <select data-placeholder="Select histories..." multiple class="chosen-select" name="test">
+      {%if user.histories %}
+        {% for history in user.histories %}
+              <option value={{history.id}} >{{history.name}}</option>
+        {% endfor %}
+      {% endif %}
+  </select>
+  <input type="submit" value="Veiw">
+</form>
+
+<script>
+  $(".chosen-select").chosen({
+    no_results_text: "Oops, nothing found!"
+  })
+</script>
+
+
+
+
 <!--RECENT INPUT HISTORY-->
 <h1 align = "Left">Input History</h1>
-<div class="table-wrapper">
+<div lass="table-wrapper">
   <table>
     <thead>
       <tr>

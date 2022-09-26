@@ -73,6 +73,26 @@ def view_history(history_id):
     return render_template("view_history.html", user=current_user, before = data_using_linear_model_without_instrument,
                            after = data_using_linear_model_with_instrument, history_id=input_user.id)
 
+@views.route('/show', methods=['POST'])
+def show():
+    data = request.form.getlist("test")
+    
+    before_datas = []
+    after_datas = []
+    
+    for id in data:
+        input_user = History.query.filter_by(id=id).first()
+        if input_user:
+            before, after = generate_graph_data(start_date = input_user.start_date,
+                                data_generated_per_year = input_user.data_generated * 365,
+                                year = 5,
+                                initial_data_size = input_user.initial_size,
+                                gradient = input_user.initial_size * 1 / 3)
+        before_datas.append(before)
+        after_datas.append(after)
+
+    return render_template("view_muitiple_histories.html", user=current_user, before_datas = before_datas,
+                           after_datas = after_datas)
 
 
 @views.route('/delete-history', methods=['POST'])
