@@ -1,3 +1,4 @@
+from select import select
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from .models import History, Storage
@@ -79,20 +80,25 @@ def show():
     
     before_datas = []
     after_datas = []
+    select_histories = []
+    name_list = []
     
     for id in data:
         input_user = History.query.filter_by(id=id).first()
         if input_user:
+            select_histories.append(input_user)
+            name_list.append(input_user.name)
             before, after = generate_graph_data(start_date = input_user.start_date,
                                 data_generated_per_year = input_user.data_generated * 365,
                                 year = 5,
                                 initial_data_size = input_user.initial_size,
                                 gradient = input_user.initial_size * 1 / 3)
-        before_datas.append(before)
-        after_datas.append(after)
+            before_datas.append(before)
+            after_datas.append(after)
+        
 
     return render_template("view_muitiple_histories.html", user=current_user, before_datas = before_datas,
-                           after_datas = after_datas)
+                           after_datas = after_datas, select_histories = select_histories, name_list = name_list)
 
 
 @views.route('/delete-history', methods=['POST'])
