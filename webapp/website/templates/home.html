@@ -139,11 +139,25 @@
           <th>
               <div class="edit">{{ history.name }}</div>
           </th>
-          <td>{{ history.data_generated }}</td>
-          <td>{{ history.price }}</td>
-          <td>{{ history.lifetime }}</td>
+
+          <td id="generated{{history.id}}"></td>
+          <td id="price{{history.id}}"></td>
+
+          <td >{{ history.lifetime }}</td>
           <td>{{ history.start_date }}</td>
-          <td>{{ history.initial_size }}</td>
+          <td id="initial{{history.id}}"></td>
+
+          <script>
+            var element = document.getElementById("price"+{{history.id}});
+            element.innerHTML = {{ history.price }}.toLocaleString()
+
+            var element = document.getElementById("generated"+{{history.id}});
+            element.innerHTML = {{ history.data_generated }}.toLocaleString()
+
+            var element = document.getElementById("initial"+{{history.id}});
+            element.innerHTML = {{ history.initial_size }}.toLocaleString()
+          </script>
+
           <th>
             <div class="popup" onclick="popUpHistory({{history.id}})">
               Delete
@@ -174,6 +188,8 @@
     popup.classList.toggle("show");
   }
 </script>
+
+
 
 
 {% endblock %}

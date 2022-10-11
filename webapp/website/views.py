@@ -170,3 +170,22 @@ def modal(history_id):
 
 #     return jsonify({})
 
+@views.route('/calculate-customize', methods=['GET', 'POST'])
+def calculateCustomize():
+    if request.method=='POST':
+        storagetTypeSet = json.loads(list(request.form.keys())[0])
+        print(storagetTypeSet)
+        costList = []
+        for i in range(len(storagetTypeSet)):
+            typename = storagetTypeSet[i][0]
+            storage_type = Storage.query.filter_by(name=typename).first().type
+            storage_price = Storage.query.filter_by(name=typename).first().price
+            months = 5*int(storagetTypeSet[i][2])/100
+            print(storagetTypeSet[i][3])
+            datagenerated = float(storagetTypeSet[i][3])*int(storagetTypeSet[i][1])/100
+            cost = calculate_cost(datagenerated, storage_price, storage_type, months)
+            cost = round(cost,2)
+            costList.append([typename, datagenerated, months, cost])
+
+        return jsonify(costList)
+

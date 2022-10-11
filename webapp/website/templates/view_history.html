@@ -21,11 +21,24 @@
             {% if history.id == history_id %}
                 <tr id = "myTable">
                   <th>{{ history.name }}</th>
-                  <td>{{ history.data_generated }}</td>
-                  <td>{{ history.price }}</td>
-                  <td>{{ history.lifetime }}</td>
-                  <td>{{ history.start_date }}</td>
-                  <td>{{ history.initial_size }}</td>
+                  <td id="generated{{history.id}}"></td>
+            <td id="price{{history.id}}"></td>
+
+            <td >{{ history.lifetime }}</td>
+            <td>{{ history.start_date }}</td>
+            <td id="initial{{history.id}}"></td>
+
+                  <script>
+                    var element = document.getElementById("price"+{{history.id}});
+                    element.innerHTML = {{ history.price }}.toLocaleString()
+        
+                    var element = document.getElementById("generated"+{{history.id}});
+                    element.innerHTML = {{ history.data_generated }}.toLocaleString()
+        
+                    var element = document.getElementById("initial"+{{history.id}});
+                    element.innerHTML = {{ history.initial_size }}.toLocaleString()
+                  </script>
+
                   <th>
                     <a onclick="openForm()" >Edit</a>
                   </th>
@@ -105,7 +118,14 @@
             {% for history in user.histories %}
                 {% if history.id == history_id %}
                     {% for storage in user.storage %}
-                        <td>{{ "$%.2f" | format(calculate_cost(history.data_generated, storage.price, storage.type, i))}}</td>
+                        <td id="{{history.id}}{{storage.name}}">{{ "%.2f" | format(calculate_cost(history.data_generated, storage.price, storage.type, i))}}</td>
+
+                        <script>
+                          var element = document.getElementById("{{history.id}}{{storage.name}}");
+                          var input = Number(element.innerHTML)
+                          element.innerHTML = "$" + input.toLocaleString()
+                        </script>
+
                     {% endfor %}
                 {% endif %}
             {% endfor %}
@@ -118,6 +138,122 @@
 
 <br>
 <br>
+
+
+
+<h1 align = "Left">Customize storage type</h1>
+<div align="right">
+     <button  class="add-button"  onClick="addRow()">Add</button>
+</div>
+
+<br>
+
+
+<table  class="storage-table">
+<tr>
+    <th>Storage Type</th>
+    <th>% of Data</th>
+    <th>% of Time</th>
+</tr>
+</table>
+<div align="right">
+<button class="submit-button" onClick="submitTable()">Submit</button>
+</div>
+    <br>
+<table id="customize-table" width="800px" border="1px" cellpadding="0px" cellspacing="0px" style="display: none">
+    <thead>
+    <tr>
+        <th align="center">Instrument's Name</th>
+        <th align="center">Data</th>
+        <th align="center">Year</th>
+        <th align="center">Cost After 5 Years</th>
+    </tr>
+    </thead>
+    <tbody class="x-cate" id="test">
+
+    </tbody>
+</table>
+
+
+<p class="calculate-result"></p>
+   <datalist id="select-type-list-id">
+
+       <option value='WEHI $1000/tb one off'></option>
+       <option value='AWS S3 (500TB+)'></option>
+       <option value='AWS Deep Glacier'></option>
+       <option value='CEPH Unimelb One-Off'></option>
+       <option value='Tape LTO8 (not including drives)'></option>
+       <option value='CEPH Unimelb Aggregate'></option>
+       <option value='10TB HDD Officeworks'></option>
+       <option value='45d CEPH Server'></option>
+
+   </datalist>
+
+<script type="text/javascript">
+
+function submitTable() {
+
+    var storagetTypeSet = [];
+    $('.storage-table tr').each(function () {
+        var element = document.getElementById("generated"+{{history_id}});
+        var row = [];
+        var tr=$(".input-history").find('tr');
+        var data_generated = element.innerHTML;
+
+        $(this).find('td').each(function () {
+
+            if($(this).find("input").length>0){
+                row.push(window.encodeURIComponent(this.children[0].value));
+            }
+
+
+        });
+        row.push(data_generated);
+        storagetTypeSet.push(row);
+    });
+    storagetTypeSet.shift()
+    $j.ajax({
+        url:"/calculate-customize",
+        method:"POST",
+        data:JSON.stringify(storagetTypeSet),
+        dataType:'json',
+        success:function(data){
+            $("#customize-table tr:not(:first)").remove();
+            $("#customize-table").show();
+            for (var i = 0; i < data.length; i++){
+                $("#customize-table").append("<tr><td>"+data[i][0]+"</td><td>" + data[i][1].toLocaleString() +"</td><td>"
+                    + data[i][2]+"</td><td>" + data[i][3].toLocaleString() + "</td></tr>");
+            }
+
+        }
+    });
+};
+
+
+
+
+function addRow(){
+var tables = $('.storage-table');
+
+
+var addtr = $("<tr>"+
+"<td><input type='text' class='storage-type-control' list='select-type-list-id' style='width: 200px'/></td>"+
+"<td><input type='text' class='storage-year-control' style='width: 80%; display: inline;' />%</td>"+
+"<td><input type='text' class='storage-year-control' style='width: 80%; display: inline;' />%</td>"+
+"<td><button  class='button primary fit small' onclick='deleteTrRow(this)'> Delete</button></td>"+
+"</tr>");
+      addtr.appendTo(tables);
+}
+
+function deleteTrRow(tr){
+    $(tr).parent().parent().remove();
+    }
+
+</script>
+
+    <br>
+    <br>
+
 <!--STORAGE CHART-->
 <button onClick = "changeMode()" >View log/original</button>
 <div class = "container" id= "chart"> Original Graph <canvas id="myChart" ></canvas></div>
@@ -188,7 +324,7 @@
                     }
                 },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
                 }
             }
         }
@@ -200,66 +336,9 @@
       config
     );
 
-
-
-    // process data for log function
-    var data_before = {{ before | safe }};
-    var data_after = {{ after | safe }};
-    for(let i = 0; i < data_before.length; i++){
-      data_before[i]["y"] = Math.log(data_before[i]["y"]);
-    }
-    for(let i = 0; i < data_after.length; i++){
-      data_after[i]["y"] = Math.log(data_after[i]["y"]);
-    }
-    
-    const log_data = {
-      datasets: [{
-          label: 'Before',
-          data: data_before,
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      },
-      {
-          label: 'After',
-          data: data_after,
-          backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      }],
-    };
-
     const log_config = {
       type: 'line',
-      data: log_data,
+      data: data,
       options: {
           scales: {
               x : {
@@ -269,7 +348,8 @@
                   }
               },
               y: {
-                  beginAtZero: true
+                  beginAtZero: true,
+                  type: 'logarithmic',
               }
           }
       }
