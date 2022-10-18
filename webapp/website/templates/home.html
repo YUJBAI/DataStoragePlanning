@@ -1,0 +1,195 @@
+{% extends "base.html" %} 
+{% block title %} Home {% endblock %} 
+{% block content %}
+<!--USER INPUT FORM-->
+<h1 align="left">Instrument Cost Calculator</h1>
+<div align="right">
+     <button type="button" name="age" id="age" data-toggle="modal" data-target="#add_data_Modal" class="btn btn-warning">Add</button>
+</div>
+
+
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <h4 class="modal-title">Insert data
+    </h4>
+
+    <button type="button" style={{"margin-right: 10%;"}} class="close" data-dismiss="modal">×</button>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div>
+</div>  
+
+
+
+<div id="add_data_Modal" class="modal fade">
+ <div class="modal-dialog">
+   <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Insert data</h4>
+   </div>
+    <div class="modal-body">
+        <form method="post" id="insert_form">
+             <div>
+             <label>Instrument's Name</label>
+             <input type="text" name="instrument" id ="instrument" class="form-control" />
+             </div>
+             <div>
+             <label>Data Generated Per Day (GB)</label>
+             <input type="text" name="dataGenerated" id="dataGenerated" class="form-control" />
+             </div>
+             <div>
+             <label>Instrument's Price (AUD)</label>
+             <input type="text" name="price" id="price" class="form-control" />
+             </div>
+             <div>
+             <label>Expected Lifetime (Years)</label>
+             <input type="text" step = "any" name="lifetime" id="lifetime" class="form-control" />
+             </div>
+             <div>
+             <label>Start Date (DD/MM/YYYY)</label>
+             <input type="text" name="startDate" id="startDate" class="form-control" />
+             </div>
+             <div>
+             <label>Initial Data Size (GB)</label>
+             <input type="text" name="initialSize" id="initialSize" class="form-control" />
+             </div>
+             <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-success" />
+             <br>
+        </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+<br>
+<br>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+<div>
+<form action="show" method="post">
+  <select data-placeholder="Select histories..." multiple class="chosen-select" name="test">
+      {%if user.histories %}
+        {% for history in user.histories %}
+              <option value={{history.id}} >{{history.name}}</option>
+        {% endfor %}
+      {% endif %}
+  </select>
+  <input type="submit" value="Veiw">
+</form>
+</div>
+
+<script>
+  $(".chosen-select").chosen({
+    no_results_text: "Oops, nothing found!"
+  })
+</script>
+
+
+<!--RECENT INPUT HISTORY-->
+<h1 align = "Left">Input History</h1>
+<div lass="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Instrument's Name</th>
+        <th>Data Generated Per Day (GB)</th>
+        <th>Price (AUD)</th>
+        <th>Expected Lifetime (Years)</th>
+        <th>Start Date (DD/MM/YYYY)</th>
+        <th>Initial Data Size (GB)</th>
+        <th>Delete</th>
+        <th>View</th>
+    
+      </tr>
+    </thead>
+    <tbody>
+      {%if user.histories %}
+        {% for history in user.histories %}
+        <tr>
+          <th>
+              <div class="edit">{{ history.name }}</div>
+          </th>
+
+          <td id="generated{{history.id}}"></td>
+          <td id="price{{history.id}}"></td>
+
+          <td >{{ history.lifetime }}</td>
+          <td>{{ history.start_date }}</td>
+          <td id="initial{{history.id}}"></td>
+
+          <script>
+            var element = document.getElementById("price"+{{history.id}});
+            element.innerHTML = {{ history.price }}.toLocaleString()
+
+            var element = document.getElementById("generated"+{{history.id}});
+            element.innerHTML = {{ history.data_generated }}.toLocaleString()
+
+            var element = document.getElementById("initial"+{{history.id}});
+            element.innerHTML = {{ history.initial_size }}.toLocaleString()
+          </script>
+
+          <th>
+            <div class="popup" onclick="popUpHistory({{history.id}})">
+              Delete
+              <span class="popuptext" id="myPopup{{history.id}}">
+                Are you sure delete this history?
+                <a onClick  = "deleteHistory({{ history.id }})">Yes</a>
+                /
+                <a>No</a>
+              </span>
+            </div>
+          </th>
+
+          <th>
+            <a href="/view-history/{{ history.id }}">View/Edit</a>
+          </th>
+
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // When the user clicks on div, open the popup
+  function popUpHistory(historyId) {
+    var popup = document.getElementById("myPopup" + historyId);
+    popup.classList.toggle("show");
+  }
+</script>
+
+
+
+
+{% endblock %}
